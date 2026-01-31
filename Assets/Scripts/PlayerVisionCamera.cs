@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
+[RequireComponent(typeof(Camera)), ExecuteInEditMode]
 public class PlayerVisionCamera : MonoBehaviour
 {
     // Assign in the inspector
@@ -11,9 +11,22 @@ public class PlayerVisionCamera : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
-        cam.projectionMatrix = Camera.main.projectionMatrix;
+        if (Application.isPlaying)
+        {
+            instance = this;
+            cam.projectionMatrix = Camera.main.projectionMatrix;
+        }
     }
+
+#if UNITY_EDITOR
+    void Update()
+    {
+        if (cam != null)
+        {
+            cam.projectionMatrix = Camera.main.projectionMatrix;
+        }
+    }
+#endif
 
     void OnDestroy()
     {
