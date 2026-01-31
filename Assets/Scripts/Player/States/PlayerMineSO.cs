@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerMineSO : StateSOBase<Player>
 {
     [SerializeField] Timer miningCooldown = new Timer(0.5f);
-    public Crystal targetCrystal;
 
     public override void DoEnterLogic()
     {
@@ -14,7 +13,6 @@ public class PlayerMineSO : StateSOBase<Player>
     public override void DoExitLogic()
     {
         base.DoExitLogic();
-        targetCrystal = null;
     }
 
     public override void DoFrameUpdateLogic()
@@ -24,7 +22,7 @@ public class PlayerMineSO : StateSOBase<Player>
         miningCooldown.Update(Time.deltaTime);
         if (miningCooldown.Laps > 0)
         {
-            targetCrystal.Mine(out bool fullyMined);
+            entity.ClosestCrystal.Mine(out bool fullyMined);
             if (fullyMined)
             {
                 entity.StateMachine.ChangeState(entity.movement == Vector2.zero ? entity.IdleState : entity.MoveState);

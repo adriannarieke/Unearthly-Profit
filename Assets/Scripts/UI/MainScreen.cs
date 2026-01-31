@@ -23,6 +23,8 @@ public class MainScreen : MonoBehaviour
     [SerializeField] Timer oxygenTimer = new Timer(60f);
     [SerializeField, Range(0f, 1f)] float lowOxygenPercentageThreshold = 0.25f;
 
+    public static bool oxygenMeterIsActive = true;
+
     static MainScreen instance;
 
     void Awake()
@@ -32,20 +34,29 @@ public class MainScreen : MonoBehaviour
 
     void Update()
     {
-        oxygenTimer.Update(Time.deltaTime);
-        oxygenMeter.fillAmount = oxygenTimer.FractionOfTimeRemaining;
-        if (oxygenTimer.TimeRemaining < lowOxygenPercentageThreshold)
+        if (oxygenMeterIsActive)
         {
+            oxygenTimer.Update(Time.deltaTime);
+            if (oxygenTimer.TimeRemaining < lowOxygenPercentageThreshold)
+            {
 
+            }
+            if (oxygenTimer.Laps > 0)
+            {
+                // Oxygen is out
+            }
         }
-        if (oxygenTimer.Laps > 0)
-        {
-            // Oxygen is out
-        }
+        oxygenMeter.fillAmount = oxygenTimer.FractionOfTimeRemaining;
+    }
+
+    public static void AddOxygen(float oxygen)
+    {
+        instance.oxygenTimer.Update(-oxygen);
     }
 
     void OnDestroy()
     {
         instance = null;
+        oxygenMeterIsActive = true;
     }
 }

@@ -28,7 +28,7 @@ public struct Timer
 
     public void Update(float timeElapsed)
     {
-        this.timeElapsed += timeElapsed;
+        this.timeElapsed = Mathf.Max(0f, this.timeElapsed + timeElapsed);
     }
 
     public void Reset()

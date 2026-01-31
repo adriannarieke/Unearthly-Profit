@@ -23,14 +23,17 @@ public class Player : MonoBehaviour
     [SerializeField] PlayerIdleSO playerIdleSOBase;
     [SerializeField] PlayerMoveSO playerMoveSOBase;
     [SerializeField] PlayerMineSO playerMineSOBase;
+    [SerializeField] PlayerRefillSO playerRefillSOBase;
 
     public PlayerIdleSO PlayerIdleSOInstance { get; private set; }
     public PlayerMoveSO PlayerMoveSOInstance { get; private set; }
     public PlayerMineSO PlayerMineSOInstance { get; private set; }
+    public PlayerRefillSO PlayerRefillSOInstance { get; private set; }
 
     public State<Player> IdleState { get; private set; }
     public State<Player> MoveState { get; private set; }
     public State<Player> MineState { get; private set; }
+    public State<Player> RefillState { get; private set; }
 
     #endregion
 
@@ -50,17 +53,21 @@ public class Player : MonoBehaviour
     #endregion
 
     readonly List<Crystal> crystalsInRange = new List<Crystal>();
-    Crystal closestCrystal;
+    public Crystal ClosestCrystal { get; private set; }
+
+    public MaskStation MaskStation { get; private set; }
 
     void Awake()
     {
         PlayerIdleSOInstance = Instantiate(playerIdleSOBase);
         PlayerMoveSOInstance = Instantiate(playerMoveSOBase);
         PlayerMineSOInstance = Instantiate(playerMineSOBase);
+        PlayerRefillSOInstance = Instantiate(playerRefillSOBase);
 
         IdleState = new State<Player>(this, PlayerIdleSOInstance);
         MoveState = new State<Player>(this, PlayerMoveSOInstance);
         MineState = new State<Player>(this, PlayerMineSOInstance);
+        RefillState = new State<Player>(this, PlayerRefillSOInstance);
 
         StateMachine.Initialize(IdleState);
     }
@@ -74,8 +81,6 @@ public class Player : MonoBehaviour
         interactAction = InputManager.GetAction("Interact");
         interactAction.performed += OnInteractAction;
         interactAction.canceled += OnInteractAction;
-
-        //visionCone.material.mainTexture = PlayerVisionCamera.Cam.targetTexture;
     }
 
     void OnDestroy()
@@ -132,6 +137,10 @@ public class Player : MonoBehaviour
             crystalsInRange.Add(crystal);
             CalculateClosestCrystal();
         }
+        else if (other.TryGetComponent(out MaskStation maskStation))
+        {
+            MaskStation = maskStation;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -140,6 +149,10 @@ public class Player : MonoBehaviour
         {
             crystalsInRange.Remove(crystal);
             CalculateClosestCrystal();
+        }
+        else if (MaskStation != null && other.transform == MaskStation.transform)
+        {
+            MaskStation = null;
         }
     }
 
@@ -154,12 +167,18 @@ public class Player : MonoBehaviour
 
     void OnInteractAction(InputAction.CallbackContext context)
     {
-        if (context.performed && closestCrystal != null)
+        if (context.performed)
         {
-            PlayerMineSOInstance.targetCrystal = closestCrystal;
-            movement = Vector2.zero;
-            Move();
-            StateMachine.ChangeState(MineState);
+            if (MaskStation != null)
+            {
+                StateMachine.ChangeState(RefillState);
+            }
+            else if (ClosestCrystal != null)
+            {
+                movement = Vector2.zero;
+                Move();
+                StateMachine.ChangeState(MineState);
+            }
         }
         else
         {
@@ -175,7 +194,7 @@ public class Player : MonoBehaviour
     {
         if (crystalsInRange.Count == 0)
         {
-            closestCrystal = null;
+            ClosestCrystal = null;
             return;
         }
 
@@ -192,6 +211,6 @@ public class Player : MonoBehaviour
                 closestCrystalIndex = i;
             }
         }
-        closestCrystal = crystalsInRange[closestCrystalIndex];
+        ClosestCrystal = crystalsInRange[closestCrystalIndex];
     }
 }

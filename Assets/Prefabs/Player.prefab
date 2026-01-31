@@ -265,9 +265,11 @@ MonoBehaviour:
   <Col>k__BackingField: {fileID: 6420921476974837567}
   <RB>k__BackingField: {fileID: 8426085256431866927}
   visionCone: {fileID: 8841039720009602044}
+  visionConeRotationLerpSpeed: 15
   playerIdleSOBase: {fileID: 11400000, guid: 0a4a4fb6e7196a141b589b5e098f31a5, type: 2}
   playerMoveSOBase: {fileID: 11400000, guid: 538bb65805eb51142a995f3f6091b7c3, type: 2}
   playerMineSOBase: {fileID: 11400000, guid: ae5c08cfa4839d74d901b111d422841e, type: 2}
+  playerRefillSOBase: {fileID: 11400000, guid: 401c7888233aa774794cd46f41e0dee1, type: 2}
   moveWish: {x: 0, y: 0}
   movement: {x: 0, y: 0}
   movementSpeed: 5
