@@ -140,12 +140,13 @@ public class Player : MonoBehaviour
         {
             PlayerMineSOInstance.targetCrystal = closestCrystal;
             movement = Vector2.zero;
-            SetMovement();
+            Move();
             StateMachine.ChangeState(MineState);
         }
         else
         {
             SetMovement();
+            Move();
             StateMachine.ChangeState(movement == Vector2.zero ? IdleState : MoveState);
         }
     }
