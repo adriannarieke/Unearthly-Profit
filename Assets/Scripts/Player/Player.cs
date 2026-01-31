@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,18 +19,15 @@ public class Player : MonoBehaviour
 
     [SerializeField] PlayerIdleSO playerIdleSOBase;
     [SerializeField] PlayerMoveSO playerMoveSOBase;
+    [SerializeField] PlayerMineSO playerMineSOBase;
 
     public PlayerIdleSO PlayerIdleSOInstance { get; private set; }
     public PlayerMoveSO PlayerMoveSOInstance { get; private set; }
+    public PlayerMineSO PlayerMineSOInstance { get; private set; }
 
     public State<Player> IdleState { get; private set; }
     public State<Player> MoveState { get; private set; }
-
-    #endregion
-
-    #region Input Variables
-
-    InputAction moveAction;
+    public State<Player> MineState { get; private set; }
 
     #endregion
 
@@ -41,13 +39,25 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    #region Input Variables
+
+    InputAction moveAction;
+    InputAction interactAction;
+
+    #endregion
+
+    readonly List<Crystal> crystalsInRange = new List<Crystal>();
+    Crystal closestCrystal;
+
     void Awake()
     {
         PlayerIdleSOInstance = Instantiate(playerIdleSOBase);
         PlayerMoveSOInstance = Instantiate(playerMoveSOBase);
+        PlayerMineSOInstance = Instantiate(playerMineSOBase);
 
         IdleState = new State<Player>(this, PlayerIdleSOInstance);
         MoveState = new State<Player>(this, PlayerMoveSOInstance);
+        MineState = new State<Player>(this, PlayerMineSOInstance);
 
         StateMachine.Initialize(IdleState);
     }
@@ -57,12 +67,18 @@ public class Player : MonoBehaviour
         moveAction = InputManager.GetAction("Move");
         moveAction.performed += OnMoveAction;
         moveAction.canceled += OnMoveAction;
+
+        interactAction = InputManager.GetAction("Interact");
+        interactAction.performed += OnInteractAction;
+        interactAction.canceled += OnInteractAction;
     }
 
     void OnDestroy()
     {
         moveAction.performed -= OnMoveAction;
         moveAction.canceled -= OnMoveAction;
+        interactAction.performed -= OnInteractAction;
+        interactAction.canceled -= OnInteractAction;
     }
 
     void Update()
@@ -89,6 +105,28 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    #region Collision/Trigger Methods
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent(out Crystal crystal))
+        {
+            crystalsInRange.Add(crystal);
+            CalculateClosestCrystal();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.TryGetComponent(out Crystal crystal))
+        {
+            crystalsInRange.Remove(crystal);
+            CalculateClosestCrystal();
+        }
+    }
+
+    #endregion
+
     #region Input Methods
 
     void OnMoveAction(InputAction.CallbackContext context)
@@ -96,5 +134,45 @@ public class Player : MonoBehaviour
         moveWish = context.ReadValue<Vector2>().normalized;
     }
 
+    void OnInteractAction(InputAction.CallbackContext context)
+    {
+        if (context.performed && closestCrystal != null)
+        {
+            PlayerMineSOInstance.targetCrystal = closestCrystal;
+            movement = Vector2.zero;
+            SetMovement();
+            StateMachine.ChangeState(MineState);
+        }
+        else
+        {
+            SetMovement();
+            StateMachine.ChangeState(movement == Vector2.zero ? IdleState : MoveState);
+        }
+    }
+
     #endregion
+
+    void CalculateClosestCrystal()
+    {
+        if (crystalsInRange.Count == 0)
+        {
+            closestCrystal = null;
+            return;
+        }
+
+        int closestCrystalIndex = 0;
+        float dstToClosestCrystal = Vector2.Distance(transform.position, crystalsInRange[0].transform.position);
+        for (int i = 1; i < crystalsInRange.Count; i++)
+        {
+            Crystal currentCrystal = crystalsInRange[i];
+
+            float dstToCrystal = Vector2.Distance(transform.position, currentCrystal.transform.position);
+            if (dstToCrystal < dstToClosestCrystal)
+            {
+                dstToClosestCrystal = dstToCrystal;
+                closestCrystalIndex = i;
+            }
+        }
+        closestCrystal = crystalsInRange[closestCrystalIndex];
+    }
 }

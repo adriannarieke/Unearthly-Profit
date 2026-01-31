@@ -157,7 +157,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &4091725412637442484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,6 +175,7 @@ MonoBehaviour:
   <RB>k__BackingField: {fileID: 8426085256431866927}
   playerIdleSOBase: {fileID: 11400000, guid: 0a4a4fb6e7196a141b589b5e098f31a5, type: 2}
   playerMoveSOBase: {fileID: 11400000, guid: 538bb65805eb51142a995f3f6091b7c3, type: 2}
+  playerMineSOBase: {fileID: 11400000, guid: ae5c08cfa4839d74d901b111d422841e, type: 2}
   moveWish: {x: 0, y: 0}
   movement: {x: 0, y: 0}
   movementSpeed: 5
