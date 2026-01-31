@@ -299,6 +299,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f83976db9fea6164a8a42db3545429b8, type: 3}
   - {fileID: 8300000, guid: 9894a5646390b734f85c635de1ab3afb, type: 3}
   breakClips:
-  - {fileID: 8300000, guid: 37fa131222a5d7f4486f2bfd47caa04e, type: 3}
+  - {fileID: 8300000, guid: bdbad7e0d61092543ab89be4648e2569, type: 3}
   health: 10
   miningSpeed: 2
