@@ -44,6 +44,7 @@ public class MainScreen : MonoBehaviour
             if (oxygenTimer.Laps > 0)
             {
                 // Oxygen is out
+                GameOverScreen.Enable();
             }
         }
         oxygenMeter.fillAmount = oxygenTimer.FractionOfTimeRemaining;
