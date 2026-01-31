@@ -22,6 +22,7 @@ public class PlayerMoveSO : StateSOBase<Player>
         }
         base.DoFrameUpdateLogic();
         entity.SetMovement();
+        entity.SR.flipX = entity.movement.x > 0f;
     }
 
     public override void DoPhysicsLogic()

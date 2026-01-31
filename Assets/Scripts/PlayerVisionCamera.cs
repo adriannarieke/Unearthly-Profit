@@ -12,9 +12,7 @@ public class PlayerVisionCamera : MonoBehaviour
     void Awake()
     {
         instance = this;
-
-        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
-        cam.targetTexture = renderTexture;
+        cam.projectionMatrix = Camera.main.projectionMatrix;
     }
 
     void OnDestroy()

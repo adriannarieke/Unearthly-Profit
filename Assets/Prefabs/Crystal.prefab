@@ -292,8 +292,13 @@ MonoBehaviour:
   - {fileID: 4336851525443767299}
   audioSource: {fileID: 4093236457514816757}
   miningClips:
-  - {fileID: 8300000, guid: df1497ffb112e9047b04cd6868b643c0, type: 3}
+  - {fileID: 8300000, guid: cbe5d537277ee4f4fa84d5863be762b5, type: 3}
+  - {fileID: 8300000, guid: 9e7ce475500f24441a971eb7dcf395a2, type: 3}
+  - {fileID: 8300000, guid: a739e4cb0925eeb489fbf1583cc9f299, type: 3}
+  - {fileID: 8300000, guid: 6ad7aa88329275540b11f2aa9e24aab5, type: 3}
+  - {fileID: 8300000, guid: f83976db9fea6164a8a42db3545429b8, type: 3}
+  - {fileID: 8300000, guid: 9894a5646390b734f85c635de1ab3afb, type: 3}
   breakClips:
-  - {fileID: 8300000, guid: df1497ffb112e9047b04cd6868b643c0, type: 3}
+  - {fileID: 8300000, guid: 37fa131222a5d7f4486f2bfd47caa04e, type: 3}
   health: 10
   miningSpeed: 2

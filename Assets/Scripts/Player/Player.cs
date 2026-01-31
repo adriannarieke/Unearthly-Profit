@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     [field: SerializeField]
     public Rigidbody2D RB { get; private set; }
     [SerializeField] Renderer visionCone;
+    [SerializeField] float visionConeRotationLerpSpeed = 15f;
+    float targetVisionConeAngle;
 
     #region State Machine Variables
 
@@ -73,7 +75,7 @@ public class Player : MonoBehaviour
         interactAction.performed += OnInteractAction;
         interactAction.canceled += OnInteractAction;
 
-        visionCone.material.mainTexture = PlayerVisionCamera.Cam.targetTexture;
+        //visionCone.material.mainTexture = PlayerVisionCamera.Cam.targetTexture;
     }
 
     void OnDestroy()
@@ -87,6 +89,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         StateMachine.CurrentState.FrameUpdate();
+
+        if (movement != Vector2.zero)
+        {
+            visionCone.transform.rotation = Quaternion.Lerp(visionCone.transform.rotation, Quaternion.Euler(0f, 0f, targetVisionConeAngle), visionConeRotationLerpSpeed * Time.deltaTime);
+        }
     }
 
     void FixedUpdate()
@@ -104,6 +111,14 @@ public class Player : MonoBehaviour
     public void Move()
     {
         RB.linearVelocity = movement * movementSpeed;
+        if (movement != Vector2.zero)
+        {
+            targetVisionConeAngle = Vector3.Angle(Vector3.up, movement);
+            if (SR.flipX)
+            {
+                targetVisionConeAngle *= -1f;
+            }
+        }
     }
 
     #endregion
