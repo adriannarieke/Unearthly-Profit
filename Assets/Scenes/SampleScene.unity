@@ -723,7 +723,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7831327995472222311, guid: f4b7f6eb3147741499bc5988d4b0e60c, type: 3}
       propertyPath: m_Name
-      value: Mask Station
+      value: Oxygen Station
       objectReference: {fileID: 0}
     - target: {fileID: 8659831239251319281, guid: f4b7f6eb3147741499bc5988d4b0e60c, type: 3}
       propertyPath: m_LocalPosition.x

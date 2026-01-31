@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
     readonly List<Crystal> crystalsInRange = new List<Crystal>();
     public Crystal ClosestCrystal { get; private set; }
 
-    public MaskStation MaskStation { get; private set; }
+    public OxygenStation MaskStation { get; private set; }
 
     void Awake()
     {
@@ -137,7 +137,7 @@ public class Player : MonoBehaviour
             crystalsInRange.Add(crystal);
             CalculateClosestCrystal();
         }
-        else if (other.TryGetComponent(out MaskStation maskStation))
+        else if (other.TryGetComponent(out OxygenStation maskStation))
         {
             MaskStation = maskStation;
         }

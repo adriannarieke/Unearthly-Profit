@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4831486312875266055}
   - component: {fileID: 4761477137165615087}
   m_Layer: 0
-  m_Name: Mask Station
+  m_Name: Oxygen Station
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
