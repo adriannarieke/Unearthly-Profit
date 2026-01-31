@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public Collider2D Col {get; private set; }
     [field: SerializeField]
     public Rigidbody2D RB { get; private set; }
+    [SerializeField] Renderer visionCone;
 
     #region State Machine Variables
 
@@ -71,6 +72,8 @@ public class Player : MonoBehaviour
         interactAction = InputManager.GetAction("Interact");
         interactAction.performed += OnInteractAction;
         interactAction.canceled += OnInteractAction;
+
+        visionCone.material.mainTexture = PlayerVisionCamera.Cam.targetTexture;
     }
 
     void OnDestroy()
