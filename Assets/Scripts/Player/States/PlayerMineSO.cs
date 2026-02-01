@@ -8,6 +8,7 @@ public class PlayerMineSO : StateSOBase<Player>
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
+        entity.Anim.Play("PlayerIdle");
     }
 
     public override void DoExitLogic()

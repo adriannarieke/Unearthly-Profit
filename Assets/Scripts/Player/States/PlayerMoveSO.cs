@@ -6,6 +6,7 @@ public class PlayerMoveSO : StateSOBase<Player>
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
+        entity.Anim.Play("PlayerWalk");
     }
 
     public override void DoExitLogic()
@@ -22,7 +23,10 @@ public class PlayerMoveSO : StateSOBase<Player>
         }
         base.DoFrameUpdateLogic();
         entity.SetMovement();
-        entity.SR.flipX = entity.movement.x > 0f;
+        if (entity.movement.x != 0f)
+        {
+            entity.SR.flipX = entity.movement.x > 0f;
+        }
     }
 
     public override void DoPhysicsLogic()

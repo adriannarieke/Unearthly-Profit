@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D), typeof(Animator))]
 public class Player : MonoBehaviour
 {
     // Assign these in the inspector
@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     public Collider2D Col {get; private set; }
     [field: SerializeField]
     public Rigidbody2D RB { get; private set; }
+    [field: SerializeField]
+    public Animator Anim { get; private set; }
     [SerializeField] Renderer visionCone;
     [SerializeField] float visionConeRotationLerpSpeed = 15f;
     float targetVisionConeAngle;
@@ -94,8 +96,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        StateMachine.CurrentState.FrameUpdate();
-
+        if (Anim.speed > 0f)
+        {
+            StateMachine.CurrentState.FrameUpdate();
+        }
         if (movement != Vector2.zero)
         {
             visionCone.transform.rotation = Quaternion.Lerp(visionCone.transform.rotation, Quaternion.Euler(0f, 0f, targetVisionConeAngle), visionConeRotationLerpSpeed * Time.deltaTime);
@@ -104,7 +108,10 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        StateMachine.CurrentState.PhysicsUpdate();
+        if (Anim.speed > 0f)
+        {
+            StateMachine.CurrentState.PhysicsUpdate();
+        }
     }
 
     #region Movement Methods
@@ -133,7 +140,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out SpaceShip spaceShip))
+        if (other.CompareTag("SpaceShip"))
         {
             touchingSpaceShip = true;
         }
@@ -150,7 +157,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.TryGetComponent(out SpaceShip spaceShip))
+        if (other.CompareTag("SpaceShip"))
         {
             touchingSpaceShip = false;
         }
@@ -181,6 +188,7 @@ public class Player : MonoBehaviour
             if (touchingSpaceShip)
             {
                 GameOverScreen.Enable(true);
+                Anim.speed = 0f;
             }
             else if (MaskStation != null)
             {
