@@ -8,6 +8,7 @@ public class GameOverScreen : MonoBehaviour
     // Assign in the inspector
     [SerializeField] Canvas screen;
     [SerializeField] TMP_Text label;
+    [SerializeField] TMP_Text moneyEarnedText;
 
     static GameOverScreen instance;
 
@@ -37,5 +38,6 @@ public class GameOverScreen : MonoBehaviour
         instance.screen.enabled = true;
         Time.timeScale = 0f;
         instance.label.text = victory ? "You win!" : "You lose!";
+        instance.moneyEarnedText.text = victory ? "You earned " + "$" + MainScreen.MoneyEarned.ToString("n2") + " in " + MainScreen.GameSpan.ToString(@"mm\:ss\.ff") + "!" : "";
     }
 }

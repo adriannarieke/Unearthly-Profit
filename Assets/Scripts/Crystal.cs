@@ -10,6 +10,7 @@ public class Crystal : MonoBehaviour
     [SerializeField] AudioClip[] breakClips = new AudioClip[0];
     [SerializeField] float health = 10f;
     [SerializeField] float miningSpeed = 2f;
+    [SerializeField] float moneyValue = 50f;
 
     /// <summary>
     /// Make progress mining this crystal
@@ -23,6 +24,7 @@ public class Crystal : MonoBehaviour
             AudioClip breakClip = breakClips[Random.Range(0, breakClips.Length)];
             audioSource.PlayOneShot(breakClip);
             MainScreen.CrystalsCollected++;
+            MainScreen.MoneyEarned += moneyValue;
             sr.enabled = false;
             foreach (Collider2D collider in colliders)
             {

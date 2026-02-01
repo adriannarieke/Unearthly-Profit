@@ -302,3 +302,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bdbad7e0d61092543ab89be4648e2569, type: 3}
   health: 10
   miningSpeed: 2
+  moneyValue: 50
