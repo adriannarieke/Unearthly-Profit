@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,7 @@ public class GameOverScreen : MonoBehaviour
 {
     // Assign in the inspector
     [SerializeField] Canvas screen;
+    [SerializeField] TMP_Text label;
 
     static GameOverScreen instance;
 
@@ -30,9 +32,10 @@ public class GameOverScreen : MonoBehaviour
         Application.Quit();
     }
 
-    public static void Enable()
+    public static void Enable(bool victory)
     {
         instance.screen.enabled = true;
         Time.timeScale = 0f;
+        instance.label.text = victory ? "You win!" : "You lose!";
     }
 }

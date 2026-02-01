@@ -658,6 +658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverScreen
   screen: {fileID: 1746186499196019008}
+  label: {fileID: 1150366398361675256}
 --- !u!1 &8233449637358350546
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] Renderer visionCone;
     [SerializeField] float visionConeRotationLerpSpeed = 15f;
     float targetVisionConeAngle;
+    bool touchingSpaceShip = false;
 
     #region State Machine Variables
 
@@ -132,7 +133,11 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out Crystal crystal))
+        if (other.TryGetComponent(out SpaceShip spaceShip))
+        {
+            touchingSpaceShip = true;
+        }
+        else if (other.TryGetComponent(out Crystal crystal))
         {
             crystalsInRange.Add(crystal);
             CalculateClosestCrystal();
@@ -145,7 +150,11 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.TryGetComponent(out Crystal crystal))
+        if (other.TryGetComponent(out SpaceShip spaceShip))
+        {
+            touchingSpaceShip = false;
+        }
+        else if (other.TryGetComponent(out Crystal crystal))
         {
             crystalsInRange.Remove(crystal);
             CalculateClosestCrystal();
@@ -169,7 +178,11 @@ public class Player : MonoBehaviour
     {
         if (context.performed)
         {
-            if (MaskStation != null)
+            if (touchingSpaceShip)
+            {
+                GameOverScreen.Enable(true);
+            }
+            else if (MaskStation != null)
             {
                 StateMachine.ChangeState(RefillState);
             }
