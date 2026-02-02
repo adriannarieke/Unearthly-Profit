@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class MainScreen : MonoBehaviour
 {
@@ -36,7 +37,15 @@ public class MainScreen : MonoBehaviour
     [SerializeField] TMP_Text moneyEarnedText;
     [SerializeField] Image oxygenMeter;
     [SerializeField] Timer oxygenTimer = new Timer(60f);
-    [SerializeField, Range(0f, 1f)] float lowOxygenPercentageThreshold = 0.25f;
+
+    [SerializeField] AudioSource lowOxygenAudio;
+    [SerializeField] AudioSource critOxygenAudio;
+
+    private bool lowOxy = false;
+    private bool critOxy = false;
+
+    [SerializeField, Range(0f, 1f)] float lowOxygenPercentageThreshold = 0.50f;
+    [SerializeField, Range(0f, 1f)] float criticalOxygenPercentageThreshold = 0.25f;
 
     public static bool oxygenMeterIsActive = true;
 
@@ -52,19 +61,34 @@ public class MainScreen : MonoBehaviour
 
     void Update()
     {
+        
         if (oxygenMeterIsActive)
         {
             oxygenTimer.Update(Time.deltaTime);
-            if (oxygenTimer.TimeRemaining < lowOxygenPercentageThreshold)
-            {
-
-            }
+            
             if (oxygenTimer.Laps > 0)
             {
                 // Oxygen is out
                 GameOverScreen.Enable(false);
             }
+            else if (oxygenTimer.TimeRemaining < (criticalOxygenPercentageThreshold * 60.0f))
+            {
+                if (!critOxy)
+                {
+                    critOxygenAudio.Play();
+                    critOxy = true;
+                }
+            }
+            else if (oxygenTimer.TimeRemaining < (lowOxygenPercentageThreshold * 60.0f))
+            {
+                if (!lowOxy)
+                {
+                    lowOxygenAudio.Play();
+                    lowOxy = true;
+                }
+            }
         }
+
         GameSpan = GameSpan.Add(TimeSpan.FromSeconds(Time.deltaTime));
         oxygenMeter.fillAmount = oxygenTimer.FractionOfTimeRemaining;
     }
